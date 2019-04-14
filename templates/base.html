@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+    <head>
+        <title>{{pagetitle}}</title>
+        <style type="text/css">
+            .error {
+                color: red;
+            }
+            input,textarea{
+                width:300px;
+            }
+        </style>
+    </head>
+<body>
+    <nav>
+        <a href="/blog">Blogs</a> |
+        <a href="/newblog">Add New Blog</a> |
+    </nav>
+    <h1 style="width:100%; text-align:center">{{pagetitle}}</h1>
+    <p>
+        {% block content %}
+        {% endblock %}
+    </p>
+</body>
+</html>
