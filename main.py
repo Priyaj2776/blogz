@@ -47,6 +47,7 @@ def listBlogs():
                                             body = body)
     else:      
         blogs = Blog.query.filter_by(deleted=False).all()
+        #blogs.sort(key=lambda x: x.id, reverse=True)
         return render_template('blogs.html',pagetitle = "Build A Blog", 
                                             blogs = blogs)
 
