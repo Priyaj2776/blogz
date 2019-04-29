@@ -9,14 +9,35 @@
             input,textarea{
                 width:300px;
             }
+            span.writtenby{
+                font-style: italic;
+            }
         </style>
     </head>
 <body>
-    <nav>
-        <a href="/blog">Blogs</a> |
-        <a href="/newblog">Add New Blog</a> |
+    <nav style="width:100%; text-align:left">
+        <a href="/">Home</a> |
+        <a href="/listblogs">Blogs</a> |
+        <a href="/newblog">Add New Blog</a> 
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="/login">Login</a> |
+        <a href="/logout">Logout</a> |
     </nav>
     <h1 style="width:100%; text-align:center">{{pagetitle}}</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class=flashes>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
     <p>
         {% block content %}
         {% endblock %}

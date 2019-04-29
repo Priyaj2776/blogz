@@ -7,8 +7,13 @@
     {% else %}
 
         {% for blog in blogs %}
-        <h1><a href="/blog?id={{blog.id}}">{{ blog.title }}</a></h1>
+        <h1><a href="/listblogs?id={{blog.id}}">{{ blog.title }}</a></h1>
         <span>{{ blog.body }}</span>
+        
+        <span  class='writtenby'>
+            written by {{blog.owner.username}}
+        </span>
+
         <hr/>
         {% endfor %}
 
