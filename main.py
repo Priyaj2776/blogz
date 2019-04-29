@@ -92,9 +92,9 @@ def login():
         
         #Validate if username and password are not blank
         if(username == ""):
-            flash("Username cannot be blank")
+            flash("Username cannot be blank","error")
         if(password == ""):
-            flash("password cannot be blank")
+            flash("password cannot be blank","error")
         
         #If username or password are blank redirect user to login page
         if(username =="" or password ==""):
