@@ -34,7 +34,7 @@ class User(db.Model):
         self.password = password
  
 @app.route('/', methods=['GET'])
-def index():
+def index1():
     users =  User.query.all()
     return render_template('index.html',users=users)
 
@@ -106,7 +106,7 @@ def login():
                 if user.password == password:
                     session['username'] = username
                     flash("Logged in")
-                    return redirect('/')
+                    return redirect('/newblog')
                 else:
                     flash('Invalid Password', 'error')
                     return render_template('login.html',username = username)
@@ -119,7 +119,7 @@ def login():
 @app.route('/logout', methods=['GET'])
 def logout():
     del session['username']
-    return redirect('/')
+    return redirect('/listblogs')
 
 @app.route('/listblogs', methods=['GET'])
 def listblogs():
@@ -128,15 +128,20 @@ def listblogs():
     blogs = None
     if(id != None): 
         blogs = Blog.query.filter_by(id=int(id)).all()
+        return render_template('blogs.html',pagetitle = "Build A Blog", 
+                                            blogs = blogs) 
     else:      
         if(user != None):
             blogs = Blog.query.filter_by(owner_id = user).all() 
+            return render_template('singleUser.html',pagetitle = "Build A Blog", 
+                                            blogs = blogs)
         else:
-            blogs = Blog.query.all() 
+            blogs = Blog.query.all()
+            return render_template('blogs.html',pagetitle = "Build A Blog", 
+                                            blogs = blogs) 
     
     #blogs.sort(key=lambda x: x.id, reverse=True)
-    return render_template('blogs.html',pagetitle = "Build A Blog", 
-                                            blogs = blogs)
+    
 
 @app.route('/newblog', methods=['POST','GET'])
 def newblog():
@@ -174,7 +179,7 @@ def newblog():
 
 @app.before_request
 def require_login():
-    allowed_routes = ['listblogs','login', 'signup','index']
+    allowed_routes = ['listblogs','login', 'signup','index1']
     if request.endpoint not in allowed_routes and 'username' not in session:
         return redirect('/login')
 
