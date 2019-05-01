@@ -2,21 +2,90 @@
 
 {% block content %}
     
-    {% if blogs|length == 0 %}
+    {% if blogs.total   == 0 %}
         <p>No Blogs yet</p>
     {% else %}
 
-        {% for blog in blogs %}
+        {% if blogs.pages   > 1 %}
+        <span class="pagination">
+            {% if blogs.has_prev %}
+                <a href="{{ url_for('listblogs', page=blogs.prev_num , user = blogs.items[0].owner.id) }}">
+                    &lt; Older posts
+                </a>
+            {% else %}
+                &lt; Older posts
+            {% endif %} 
+            
+            &nbsp;|&nbsp; 
+            
+            {% if blogs.pages   > 2 %}
+                {% for k in range(1,blogs.pages + 1) %}
+                    {% if k == blogs.page %}
+                        {{ k }}
+                    {% else %}
+                        <a href="{{ url_for('listblogs', page= k, user = blogs.items[0].owner.id) }}">
+                            {{k}} 
+                        </a>
+                    {% endif %}
+                    &nbsp;|&nbsp;
+                {%endfor%}
+            {% endif %} 
+
+            {% if blogs.has_next %}
+                <a href="{{ url_for('listblogs', page=blogs.next_num, user = blogs.items[0].owner.id) }}">
+                    Newer posts &gt;
+                </a>
+            {% else %}
+                Newer posts &gt;
+            {% endif %}
+        </span>
+        {% endif %}
+
+        {% for blog in blogs.items %}
         <h1><a href="/listblogs?id={{blog.id}}">{{ blog.title }}</a></h1>
         <span>{{ blog.body }}</span>
         <br/><br/>
         <span  class='writtenby'>
-            - written by <a href="/listblogs?user={{blog.owner.id}}"">{{blog.owner.username}}</a>
+            - written by <a href="/listblogs?user={{blog.owner.id}}">{{blog.owner.username}}</a>
         </span>
 
         <hr/>
         {% endfor %}
 
+        {% if blogs.pages   > 1 %}
+        <span class="pagination">
+            {% if blogs.has_prev %}
+                <a href="{{ url_for('listblogs', page=blogs.prev_num, user = blogs.items[0].owner.id) }}">
+                    &lt; Older posts
+                </a>
+            {% else %}
+                &lt; Older posts
+            {% endif %} 
+            
+            &nbsp;|&nbsp; 
+            
+            {% if blogs.pages   > 2 %}
+                {% for k in range(1,blogs.pages + 1) %}
+                    {% if k == blogs.page %}
+                        {{ k }}
+                    {% else %}
+                        <a href="{{ url_for('listblogs', page= k, user = blogs.items[0].owner.id) }}">
+                            {{k}} 
+                        </a>
+                    {% endif %}
+                    &nbsp;|&nbsp;
+                {%endfor%}
+            {% endif %} 
+
+            {% if blogs.has_next %}
+                <a href="{{ url_for('listblogs', page=blogs.next_num, user = blogs.items[0].owner.id) }}">
+                    Newer posts &gt;
+                </a>
+            {% else %}
+                Newer posts &gt;
+            {% endif %}
+        </span>
+        {% endif %}
     {% endif %}
 
 {% endblock %}

@@ -34,7 +34,7 @@ class User(db.Model):
         self.password = password
  
 @app.route('/', methods=['GET'])
-def index1():
+def index():
     users =  User.query.all()
     return render_template('index.html',users=users)
 
@@ -125,22 +125,31 @@ def logout():
 def listblogs():
     id = request.args.get('id')
     user = request.args.get('user')
+    
+    per_page = 5
+    page = 1
+    try:
+        page = int(request.args.get('page'))
+    except:
+        pass
+
     blogs = None
     if(id != None): 
-        blogs = Blog.query.filter_by(id=int(id)).all()
+        blogs = Blog.query.filter_by(id=int(id)).paginate(page, per_page)
         return render_template('blogs.html',pagetitle = "Build A Blog", 
                                             blogs = blogs) 
     else:      
         if(user != None):
-            blogs = Blog.query.filter_by(owner_id = user).all() 
+            blogs = Blog.query.filter_by(owner_id = user).paginate(page, per_page)
             return render_template('singleUser.html',pagetitle = "Build A Blog", 
                                             blogs = blogs)
         else:
-            blogs = Blog.query.all()
+            #blogs = Blog.query.all().paginate(page=1, per_page=5, error_out=True, max_per_page=None)
+            blogs = Blog.query.paginate(page, per_page)
+            
             return render_template('blogs.html',pagetitle = "Build A Blog", 
                                             blogs = blogs) 
     
-    #blogs.sort(key=lambda x: x.id, reverse=True)
     
 
 @app.route('/newblog', methods=['POST','GET'])
@@ -179,7 +188,7 @@ def newblog():
 
 @app.before_request
 def require_login():
-    allowed_routes = ['listblogs','login', 'signup','index1']
+    allowed_routes = ['listblogs','login', 'signup','index']
     if request.endpoint not in allowed_routes and 'username' not in session:
         return redirect('/login')
 
